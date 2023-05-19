@@ -13,8 +13,6 @@ app.get("/", (req, res) => {
   res.send("Botboy is running");
 });
 
-console.log();
-
 // !! MongoDB connection
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@sumon.oybrgyl.mongodb.net/?retryWrites=true&w=majority`;
 
@@ -30,10 +28,16 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
 
     // ??? Database connection
     const toysCollection = client.db("toysDB").collection("toys");
+
+    // GET /toys
+    app.get("/toys", async (req, res) => {
+      const toys = await toysCollection.find().toArray();
+      res.send(toys);
+    })
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Successfully connected to MongoDB!");
