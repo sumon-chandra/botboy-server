@@ -42,9 +42,15 @@ async function run() {
     // Get toys by category
     app.get("/toys-category", async (req, res) => {
       let query = {}
-      req.query?.category && (query = {category: req.query.category})
+      req.query?.category && (query = { category: req.query.category })
       const result = await toysCollection.find(query).toArray()
       res.send(result)
+    })
+
+    // Get Toys by discount
+    app.get('/toys/discount', async (req, res) => {
+      const toys = await toysCollection.find({ "discount": { $exists: true } }).toArray()
+      res.send(toys)
     })
 
 
