@@ -38,6 +38,16 @@ async function run() {
       const toys = await toysCollection.find().toArray();
       res.send(toys);
     })
+
+    // Get toys by category
+    app.get("/toys-category", async (req, res) => {
+      let query = {}
+      req.query?.category && (query = {category: req.query.category})
+      const result = await toysCollection.find(query).toArray()
+      res.send(result)
+    })
+
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Successfully connected to MongoDB!");
