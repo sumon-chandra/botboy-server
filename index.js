@@ -54,10 +54,11 @@ async function run() {
     })
 
     // Get Toys only for customers
+    // Define the range of documents you want to retrieve
+    const start_index = 8;
+    const end_index = 15;
     app.get("/toys/only-for-you", async (req, res) => {
-      const query = req.query
-      const limit = parseInt(query.limit)
-      const toys = await toysCollection.find().limit(limit).toArray()
+      const toys = await toysCollection.find().skip(start_index).limit(end_index - start_index + 1).toArray()
       res.send(toys)
     })
 
