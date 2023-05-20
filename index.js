@@ -6,7 +6,12 @@ const app = express();
 
 // ? Middleware
 app.use(express.json());
-app.use(cors());
+const corsOptions = {
+  origin: '*',
+  credentials: true,
+  optionSuccessStatus: 200,
+}
+app.use(cors(corsOptions))
 require("dotenv").config();
 
 app.get("/", (req, res) => {
