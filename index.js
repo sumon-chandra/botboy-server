@@ -34,8 +34,12 @@ async function run() {
     const toysCollection = client.db("toysDB").collection("toys");
 
     // GET /toys
+    app.get("/total-toys", async (req, res) => {
+      const result = await toysCollection.estimatedDocumentCount();
+      res.send({ totalToys: result });
+    });
     app.get("/toys", async (req, res) => {
-      const toys = await toysCollection.find().toArray();
+      const toys = await toysCollection.find().limit(20).toArray();
       res.send(toys);
     })
 
