@@ -53,6 +53,14 @@ async function run() {
       res.send(toys)
     })
 
+    // Get Toys only for customers
+    app.get("/toys/only-for-you", async (req, res) => {
+      const query = req.query
+      const limit = parseInt(query.limit)
+      const toys = await toysCollection.find().limit(limit).toArray()
+      res.send(toys)
+    })
+
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
