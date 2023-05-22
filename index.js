@@ -103,7 +103,17 @@ async function run() {
       res.send(result);
     })
     app.patch("/my-toys/:id", async (req, res) => {
-      const result = await myToysCollection.updateOne({ _id: new ObjectId(req.params.id) }, { $set: req.body });
+      const filter = { _id: new ObjectId(req.params.id) }
+      const updatedToy = {
+        $set: {
+          price: req.body?.price,
+          discount: req.body?.discount,
+          category: req.body?.category,
+          quantity: req.body?.quantity
+        }
+      }
+      const options = { upsert: true };
+      const result = await myToysCollection.updateOne(filter, updatedToy, options);
       res.send(result);
     })
 
