@@ -86,11 +86,24 @@ async function run() {
     })
 
     app.get("/my-toys", async (req, res) => {
-      const results = await myToysCollection.find().toArray()
+      let query = {};
+      if (req.query?.email) {
+        query = { seller_email: req.query.email }
+      }
+      console.log(query);
+      const results = await myToysCollection.find(query).toArray()
       res.send(results);
     })
     app.get("/my-toys/:id", async (req, res) => {
       const result = await myToysCollection.findOne({ _id: new ObjectId(req.params.id) });
+      res.send(result);
+    })
+    app.delete("/my-toys/:id", async (req, res) => {
+      const result = await myToysCollection.deleteOne({ _id: new ObjectId(req.params.id) });
+      res.send(result);
+    })
+    app.patch("/my-toys/:id", async (req, res) => {
+      const result = await myToysCollection.updateOne({ _id: new ObjectId(req.params.id) }, { $set: req.body });
       res.send(result);
     })
 
