@@ -88,6 +88,11 @@ async function run() {
       const results = await myToysCollection.find().toArray()
       res.send(results);
     })
+    app.get("/my-toys/:id", async (req, res) => {
+      const result = await myToysCollection.findOne({ _id: new ObjectId(req.params.id) });
+      res.send(result);
+    })
+
     // Send a ping to confirm a successful connection
     // await client.db("admin").command({ ping: 1 });
     console.log("Successfully connected to MongoDB!");
