@@ -46,7 +46,7 @@ async function run() {
     });
     app.get("/toys", async (req, res) => {
       const sort = req.query.sorting === 'descending' ? -1 : 1;
-      const toys = await toysCollection.find().sort({ quantity: sort }).limit(20).toArray();
+      const toys = await toysCollection.find().sort({ price: sort }).limit(20).toArray();
       res.send(toys);
     })
 
