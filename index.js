@@ -37,6 +37,7 @@ async function run() {
 
     // ??? Database connection
     const toysCollection = client.db("toysDB").collection("toys");
+    const myToysCollection = client.db("toysDB").collection("myToys");
 
     // GET /toys
     app.get("/total-toys", async (req, res) => {
@@ -63,7 +64,7 @@ async function run() {
     })
 
     // Get Toys by discount
-    app.get('/toys/discount', async (req, res) => {
+    app.get('/discount', async (req, res) => {
       const toys = await toysCollection.find({ "discount": { $exists: true } }).toArray()
       res.send(toys)
     })
@@ -72,14 +73,23 @@ async function run() {
     // Define the range of documents you want to retrieve
     const start_index = 8;
     const end_index = 15;
-    app.get("/toys/only-for-you", async (req, res) => {
+    app.get("/only-for-you", async (req, res) => {
       const toys = await toysCollection.find().skip(start_index).limit(end_index - start_index + 1).toArray()
       res.send(toys)
     })
 
+    // Post request for new toy
+    app.post("/my-toys", async (req, res) => {
+      const result = await myToysCollection.insertOne(req.body);
+      res.send(result);
+    })
 
+    app.get("/my-toys", async (req, res) => {
+      const results = await myToysCollection.find().toArray()
+      res.send(results);
+    })
     // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
+    // await client.db("admin").command({ ping: 1 });
     console.log("Successfully connected to MongoDB!");
   } finally {
     // Ensures that the client will close when you finish/error
